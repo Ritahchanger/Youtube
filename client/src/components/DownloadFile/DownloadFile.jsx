@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import { FaDownload, FaExclamationTriangle } from "react-icons/fa";
 
 const DownloadFile = () => {
   const [resolution, setResolution] = useState("");
@@ -6,9 +8,10 @@ const DownloadFile = () => {
   const [error, setError] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [url, setUrl] = useState("");
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const videoData = JSON.parse(localStorage.getItem('video'));
+    const videoData = JSON.parse(localStorage.getItem("video"));
     if (videoData) {
       setThumbnail(videoData.thumbnail);
       setUrl(videoData.url);
@@ -29,14 +32,19 @@ const DownloadFile = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        url: url, 
+        url: url,
         resolution: resolution,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         setLoading(false);
-        alert(`Download started! File path: ${data.filePath}`);
+        Swal.fire({
+          icon: "success",
+          title: "Download Complete!",
+          text: "Your video has been successfully downloaded.",
+          confirmButtonText: "OK",
+        });
       })
       .catch((err) => {
         setLoading(false);
@@ -46,41 +54,73 @@ const DownloadFile = () => {
 
   return (
     <div
-      className="w-full flex justify-center flex-col items-center"
-      style={{ height: "calc(100vh - 40px)" }}
+      className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 text-white"
+      style={{ backgroundSize: "cover", backgroundAttachment: "fixed" }}
     >
-      <div className="flex justify-between w-full max-w-[1200px] px-[3rem] gap-10">
-        <div className="w-1/2">
-          <img
-            src={thumbnail || "https://via.placeholder.com/400"} // Fallback if thumbnail is unavailable
-            alt="Video Thumbnail"
-            className="w-full rounded-md border-6 border-neutral-400"
-          />
+      <div className="max-w-4xl w-full bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div className="flex items-center justify-between bg-gray-700 p-4">
+          <h2 className="text-2xl font-bold">YouTube Video Downloader</h2>
         </div>
-        <div className="flex flex-col w-1/2 justify-center">
-          <h3 className="text-rose-600 text-sm font-semibold mb-4">
-            SELECT RESOLUTION
-          </h3>
-          <select
-            value={resolution}
-            onChange={(e) => setResolution(e.target.value)}
-            className="border border-neutral-300 p-2 mb-4 rounded-md"
-          >
-            <option value="">Select Resolution</option>
-            <option value="1080">1080p</option>
-            <option value="720">720p</option>
-            <option value="480">480p</option>
-          </select>
 
-          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        <div className="flex flex-col sm:flex-row p-6 space-x-0 sm:space-x-6">
+          <div className="w-full sm:w-1/3">
+            <img
+              src={thumbnail || "https://via.placeholder.com/400"}
+              alt="Video Thumbnail"
+              className="w-full h-auto rounded-lg shadow-xl transform hover:scale-105 transition duration-300"
+            />
+          </div>
 
-          <button
-            onClick={handleDownload}
-            className="bg-orange-500 text-white w-32 h-12 rounded-md"
-            disabled={loading}
-          >
-            {loading ? "Downloading..." : "Download"}
-          </button>
+          <div className="w-full sm:w-2/3 flex flex-col justify-center mt-6 sm:mt-0">
+            <h3 className="text-xl font-semibold text-orange-300 mb-4">Select Resolution</h3>
+
+            <select
+              value={resolution}
+              onChange={(e) => setResolution(e.target.value)}
+              className="p-3 bg-gray-700 border border-neutral-600 text-white rounded-md mb-6 transition duration-200 hover:border-orange-500"
+            >
+              <option value="">Select Resolution</option>
+              <option value="1080">1080p</option>
+              <option value="720">720p</option>
+              <option value="480">480p</option>
+            </select>
+
+            {error && (
+              <div className="flex items-center text-red-500 mb-4">
+                <FaExclamationTriangle className="mr-2" />
+                <p className="text-sm">{error}</p>
+              </div>
+            )}
+
+            <button
+              onClick={handleDownload}
+              className={`bg-orange-500 text-white py-3 px-8 rounded-md font-semibold hover:bg-orange-400 transition-all duration-300 transform ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 border-t-2 border-white rounded-full animate-spin"></div>
+                  <span>Downloading...</span>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <FaDownload />
+                  <span>Download</span>
+                </div>
+              )}
+            </button>
+
+            {loading && (
+              <div className="mt-4 w-full h-2 bg-gray-600 rounded-full">
+                <div
+                  className="h-2 bg-orange-400 rounded-full"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
