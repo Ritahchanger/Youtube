@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const DownloadFile = () => {
   const [resolution, setResolution] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    const videoData = JSON.parse(localStorage.getItem('video'));
+    if (videoData) {
+      setThumbnail(videoData.thumbnail);
+      setUrl(videoData.url);
+    }
+  }, []);
 
   const handleDownload = () => {
     if (!resolution) {
@@ -13,14 +23,13 @@ const DownloadFile = () => {
     setLoading(true);
     setError("");
 
-    // Send request to backend for video download (This would need to be hooked up to your backend API)
     fetch("http://localhost:5000/download", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        url: "https://www.youtube.com/watch?v=example", // Replace with actual URL
+        url: url, 
         resolution: resolution,
       }),
     })
@@ -43,12 +52,12 @@ const DownloadFile = () => {
       <div className="flex justify-between w-full max-w-[1200px] px-[3rem] gap-10">
         <div className="w-1/2">
           <img
-            src="https://youtu.be/pPrrqQzQdP0?si=wFK24ePYcELBMPHp"
-            alt="Video Preview"
+            src={thumbnail || "https://via.placeholder.com/400"} // Fallback if thumbnail is unavailable
+            alt="Video Thumbnail"
             className="w-full rounded-md border-6 border-neutral-400"
           />
         </div>
-        <div className="flex flex-col w-1/2 justify-center ">
+        <div className="flex flex-col w-1/2 justify-center">
           <h3 className="text-rose-600 text-sm font-semibold mb-4">
             SELECT RESOLUTION
           </h3>

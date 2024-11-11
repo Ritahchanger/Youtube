@@ -2,7 +2,13 @@ from flask import Flask, request, jsonify
 import yt_dlp
 import os
 
+from flask_cors import CORS
+
+
 app = Flask(__name__)
+
+
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 
 DOWNLOAD_FOLDER = os.path.expanduser("~/Desktop/PythonPlayground/downloads")
