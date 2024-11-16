@@ -1,15 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+const initialState={
+
+    format:'video'
+
+}
+
+
 const FileFormatSlice=createSlice({
 
     name:'downloadFormat',
 
-    initialState:{
-
-        format:'video'
-
-    },
-
+    initialState,
+    
     reducers:{
 
         setAudio:(state,action)=>{

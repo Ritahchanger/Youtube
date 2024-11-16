@@ -2,8 +2,16 @@ import { useState } from "react";
 import axios from "axios";
 import Preloader from "../Preloader/Preloader";
 import { useNavigate } from "react-router-dom";
-import "./Hero.css"
+import "./Hero.css";
+
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+
 const Hero = () => {
+  const format = useSelector((state) => state.downloadFormat.format);
+
+  console.log(format)
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState("");
@@ -14,6 +22,15 @@ const Hero = () => {
 
     try {
       console.log("Fetching thumbnail for URL:", url);
+
+      if (url.trim() === "") {
+        Swal.fire({
+          icon: "error",
+          text: "Enter url kindly",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
 
       const response = await axios.post(
         "http://localhost:5000/thumbnail",
@@ -48,6 +65,15 @@ const Hero = () => {
       }}
     >
       <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+        {format === "video" ? (
+          <h3 className="text-center text-3xl mb-4 text-blue-500 border-b border-blue-500">
+            DOWNLOAD MP4
+          </h3>
+        ) : (
+          <h3 className="text-center text-3xl mb-4 text-blue-500 border-b border-blue-500">
+            DOWNLOAD MP3
+          </h3>
+        )}
         <div className="text-center mb-8">
           <h3 className="text-4xl font-semibold text-blue-600 sm:text-3xl md:text-4xl">
             Daniolla Video Downloader

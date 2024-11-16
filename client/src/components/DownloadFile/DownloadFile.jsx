@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { FaDownload, FaExclamationTriangle } from "react-icons/fa";
-
+import { useSelector } from "react-redux";
 const DownloadFile = () => {
   const [resolution, setResolution] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,8 @@ const DownloadFile = () => {
     }
   }, []);
 
+  const format = useSelector((state) => state.downloadFormat.format);
+
   const handleDownload = () => {
     if (!resolution) {
       setError("Please select a resolution.");
@@ -33,6 +35,7 @@ const DownloadFile = () => {
       },
       body: JSON.stringify({
         url: url,
+        format: format,
         resolution: resolution,
       }),
     })
@@ -54,9 +57,14 @@ const DownloadFile = () => {
 
   return (
     <div
-      className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 text-white"
+      className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 text-white"
       style={{ backgroundSize: "cover", backgroundAttachment: "fixed" }}
     >
+      {format === "video" ? (
+        <h2 className="text-2xl font-bold ">Download MP4</h2>
+      ) : (
+        <h2 className="text-2xl font-bold ">Download MP3</h2>
+      )}
       <div className="max-w-4xl w-full bg-gray-800 rounded-lg shadow-lg overflow-hidden">
         <div className="flex items-center justify-between bg-gray-700 p-4">
           <h2 className="text-2xl font-bold">YouTube Video Downloader</h2>
@@ -72,18 +80,22 @@ const DownloadFile = () => {
           </div>
 
           <div className="w-full sm:w-2/3 flex flex-col justify-center mt-6 sm:mt-0">
-            <h3 className="text-xl font-semibold text-orange-300 mb-4">Select Resolution</h3>
+            <h3 className="text-xl font-semibold text-orange-300 mb-4">
+              Select Resolution
+            </h3>
 
-            <select
-              value={resolution}
-              onChange={(e) => setResolution(e.target.value)}
-              className="p-3 bg-gray-700 border border-neutral-600 text-white rounded-md mb-6 transition duration-200 hover:border-orange-500"
-            >
-              <option value="">Select Resolution</option>
-              <option value="1080">1080p</option>
-              <option value="720">720p</option>
-              <option value="480">480p</option>
-            </select>
+            {format === "video" && (
+              <select
+                value={resolution}
+                onChange={(e) => setResolution(e.target.value)}
+                className="p-3 bg-gray-700 border border-neutral-600 text-white rounded-md mb-6 transition duration-200 hover:border-orange-500"
+              >
+                <option value="">Select Resolution</option>
+                <option value="1080">1080p</option>
+                <option value="720">720p</option>
+                <option value="480">480p</option>
+              </select>
+            )}
 
             {error && (
               <div className="flex items-center text-red-500 mb-4">
