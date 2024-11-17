@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { FaDownload, FaExclamationTriangle } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const DownloadFile = () => {
+  const navigate = useNavigate();
   const [resolution, setResolution] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -47,6 +49,9 @@ const DownloadFile = () => {
           title: "Download Complete!",
           text: "Your video has been successfully downloaded.",
           confirmButtonText: "OK",
+        }).then(() => {
+          localStorage.clear();
+          navigate("/");
         });
       })
       .catch((err) => {

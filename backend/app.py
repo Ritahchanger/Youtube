@@ -5,13 +5,34 @@ import os
 from flask_cors import CORS
 
 
+
+import platform;
+
+
 app = Flask(__name__)
 
 
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 
-DOWNLOAD_FOLDER = os.path.expanduser("~/Downloads")
+
+def get_download_folder():
+
+    if os.name == "nt":
+
+        return os.path.join(os.getenv("USERPROFILE"), "Downloads")
+    elif platform.system() == "Darwin":
+
+        return os.path.expanduser("~/Downloads")
+    else:
+        return os.path.expanduser("~/Downloads")
+
+
+# DOWNLOAD_FOLDER = os.path.expanduser("~/Downloads")
+
+DOWNLOAD_FOLDER = get_download_folder()
+
+app.config["DOWNLOAD_FOLDER"] = DOWNLOAD_FOLDER
 
 
 @app.route("/", methods=["GET"])
