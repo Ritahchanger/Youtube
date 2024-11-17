@@ -18,7 +18,7 @@ The project is divided into the following main parts:
 - **React**: The client-side of the app is built using React for dynamic interaction.
 - **Tailwind CSS**: A utility-first CSS framework for responsive design.
 
-### Backend (`app.py`)
+### Backend (`backend/app.py`)
 - **Flask**: Flask is used to handle HTTP requests from the frontend and manage video downloads.
 
 ### Python Environment (`env`)
