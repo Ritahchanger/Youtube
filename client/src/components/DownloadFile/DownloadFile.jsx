@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import { FaDownload, FaExclamationTriangle } from "react-icons/fa";
+import { Download, AlertTriangle } from 'lucide-react';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 const DownloadFile = () => {
@@ -104,7 +104,7 @@ const DownloadFile = () => {
 
             {error && (
               <div className="flex items-center text-red-500 mb-4">
-                <FaExclamationTriangle className="mr-2" />
+                <AlertTriangle size={20} className="mr-2" />
                 <p className="text-sm">{error}</p>
               </div>
             )}
@@ -123,7 +123,7 @@ const DownloadFile = () => {
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <FaDownload />
+                  <Download size={20} />
                   <span>Download</span>
                 </div>
               )}
