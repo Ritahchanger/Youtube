@@ -33,7 +33,7 @@ const Hero = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:5000/thumbnail",
+        "https://ritahchanger.pythonanywhere.com/thumbnail",
         { url: url },
         {
           headers: {

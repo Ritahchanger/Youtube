@@ -30,7 +30,7 @@ const DownloadFile = () => {
     setLoading(true);
     setError("");
 
-    fetch("http://localhost:5000/download", {
+    fetch("https://ritahchanger.pythonanywhere.com/download", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
