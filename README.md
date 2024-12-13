@@ -3,16 +3,15 @@
 This project is a **YouTube Downloader** application built using **Flask** for the backend and **React Vite** with **Tailwind CSS** for the frontend. The goal of this project is to provide a safe, efficient way for users to download YouTube videos without intrusive ads that are often encountered on other downloaders.
 
 ## Features
+
 - **Download Videos**: Download videos from YouTube in various resolutions (e.g., 1080p, 720p).
 - **User-friendly Interface**: Built with React Vite and styled using Tailwind CSS for a clean and responsive UI.
 - **Flask Backend**: The backend handles the video processing and downloading requests.
 - **Fast and Reliable**: Avoids unwanted ads and provides a straightforward download process.
-
+- 
 ## Project Structure
 
 The project is divided into the following main parts:
-
-
 
 ### Frontend (`client/`)
 - **React**: The client-side of the app is built using React for dynamic interaction.
